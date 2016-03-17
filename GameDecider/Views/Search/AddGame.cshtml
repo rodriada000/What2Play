@@ -1,21 +1,17 @@
 ﻿@model IEnumerable<GameDecider.Models.Platform>
 
 <table class="table">
-    <tr>
-        <th>
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            Add
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @using (Html.BeginForm("AddGame", "Search", new { plat_id_str = item.PlatformID, game_id = ViewBag.GameId }, FormMethod.Post))
+                {
+                    <input type="submit" value="@item.Name" />
+                }
+            </td>
+        </tr>
+    }
 
 </table>

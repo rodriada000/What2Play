@@ -72,6 +72,8 @@ namespace GameDecider.Controllers
                 Logins = await UserManager.GetLoginsAsync(userId),
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
+            ApplicationDbContext db = new ApplicationDbContext();
+            ViewBag.Games = db.VideoGames.Where(g => g.UserID == userId);
             return View(model);
         }
 

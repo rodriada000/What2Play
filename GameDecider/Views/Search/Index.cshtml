@@ -37,32 +37,38 @@
         @if (Request.IsAuthenticated)
         {
             <td>
-                <a href='@Url.Action("AddGame", new { id = item.id })' class="add-modal">Add Game</a>
+                <a id="add-link" href="#" onclick="javascript:ShowDialog('@item.id')">Add Game</a>
             </td>
         }
     </tr>
 }
-
 </table>
 
-<script src="~/Scripts/jquery-ui-1.11.4.min.js" type="text/javascript">
-    $.ajaxSetup({ cache: false });
+<div id="add-dialog"></div>
 
-    $(document).ready(function () {
-        $("a.add-modal").live("click", function (e) {
-            e.preventDefault();
+@section scripts
+{
+    <script type="text/javascript">
+        $.ajaxSetup({ cache: false });
 
-            $("<div></div>")
-                .addClass("dialog")
-                .appendTo("body")
-                .dialog({
-                    title: "hi",
-                    close: function () { $(this).remove(); },
-                    modal: true,
-                    height: 250,
-                    width: 400
-                })
-                .load(this.href);
-        });
-    });
-</script>
+        function ShowDialog(id)
+        {
+            $("#add-dialog").dialog({
+                autoOpen: true,
+                title: "Select Platform",
+                closeText: '',
+                draggable: false,
+                resizable: false,
+                height: 400,
+                width: 350,
+                modal: true,
+                open: function () {
+                    url = "@Url.Action("AddGame", new { id_str = "JSVar" })";
+                    url = url.replace("JSVar", id);
+                    console.log(url);
+                    $(this).load(url);
+                },
+            });
+        }
+    </script>
+}

@@ -210,9 +210,18 @@
     <Compile Include="Migrations\201603161848273_PlatformName.Designer.cs">
       <DependentUpon>201603161848273_PlatformName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201603170432470_tweakGames.cs" />
+    <Compile Include="Migrations\201603170432470_tweakGames.Designer.cs">
+      <DependentUpon>201603170432470_tweakGames.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603170438199_tweakGames2.cs" />
+    <Compile Include="Migrations\201603170438199_tweakGames2.Designer.cs">
+      <DependentUpon>201603170438199_tweakGames2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\IgdbGameDetails.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Platform.cs" />
     <Compile Include="Models\VideoGame.cs" />
@@ -335,6 +344,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201603161848273_PlatformName.resx">
       <DependentUpon>201603161848273_PlatformName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603170432470_tweakGames.resx">
+      <DependentUpon>201603170432470_tweakGames.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603170438199_tweakGames2.resx">
+      <DependentUpon>201603170438199_tweakGames2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
