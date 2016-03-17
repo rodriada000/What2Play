@@ -1,5 +1,4 @@
-﻿@using Microsoft.AspNet.Identity
-@model IEnumerable<GameDecider.Controllers.IgdbGame>
+﻿@model IEnumerable<GameDecider.Controllers.IgdbGame>
 
 @{
     ViewBag.Title = "Search Results";
@@ -38,10 +37,32 @@
         @if (Request.IsAuthenticated)
         {
             <td>
-                Add Game
+                <a href='@Url.Action("AddGame", new { id = item.id })' class="add-modal">Add Game</a>
             </td>
         }
     </tr>
 }
 
 </table>
+
+<script src="~/Scripts/jquery-ui-1.11.4.min.js" type="text/javascript">
+    $.ajaxSetup({ cache: false });
+
+    $(document).ready(function () {
+        $("a.add-modal").live("click", function (e) {
+            e.preventDefault();
+
+            $("<div></div>")
+                .addClass("dialog")
+                .appendTo("body")
+                .dialog({
+                    title: "hi",
+                    close: function () { $(this).remove(); },
+                    modal: true,
+                    height: 250,
+                    width: 400
+                })
+                .load(this.href);
+        });
+    });
+</script>

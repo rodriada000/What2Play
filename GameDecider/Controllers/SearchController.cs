@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using GameDecider.Models;
 
 namespace GameDecider.Controllers
 {
@@ -32,6 +33,29 @@ namespace GameDecider.Controllers
 
             return View(new List<IgdbGame>()); // json error occured if made it here
         }
+
+        public ActionResult AddGame(int id)
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+
+            using (WebClient wc = new WebClient())
+            {
+                string url = "https://www.igdb.com/api/v1/games/" + id + "?token=RdX2gpnNPeXJktPPCmnKt4E4BG5FoJXsUh5-gFARXOY";
+                var json = wc.DownloadString(url);
+                if (json != null)
+                {
+                    Dictionary<string, object> games = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+                    return View(games["game"]);
+                }
+            }
+
+            return PartialView(db.Platforms.ToList());
+        }
+    }
+
+    public class GameDetails
+    {
+
     }
 
     public class IgdbGame
