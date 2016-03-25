@@ -1,5 +1,6 @@
 namespace GameDecider.Migrations
 {
+    using Models;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -26,6 +27,9 @@ namespace GameDecider.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+
+            context.Platforms.AddOrUpdate(p => p.Name, new Platform { Name = "PS4" }, new Platform { Name = "Xbox One" }, new Platform { Name = "PC" }, new Platform { Name = "Xbox 360" },
+                                                        new Platform { Name = "Playstation 3" });
         }
     }
 }

@@ -202,21 +202,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201603161842028_VideoGames.cs" />
-    <Compile Include="Migrations\201603161842028_VideoGames.Designer.cs">
-      <DependentUpon>201603161842028_VideoGames.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201603161848273_PlatformName.cs" />
-    <Compile Include="Migrations\201603161848273_PlatformName.Designer.cs">
-      <DependentUpon>201603161848273_PlatformName.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201603170432470_tweakGames.cs" />
-    <Compile Include="Migrations\201603170432470_tweakGames.Designer.cs">
-      <DependentUpon>201603170432470_tweakGames.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201603170438199_tweakGames2.cs" />
-    <Compile Include="Migrations\201603170438199_tweakGames2.Designer.cs">
-      <DependentUpon>201603170438199_tweakGames2.cs</DependentUpon>
+    <Compile Include="Migrations\201603252024227_initme.cs" />
+    <Compile Include="Migrations\201603252024227_initme.Designer.cs">
+      <DependentUpon>201603252024227_initme.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -325,6 +313,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Search\AddGame.cshtml" />
+    <Content Include="Views\Home\SelectRandomGame.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -339,17 +328,8 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201603161842028_VideoGames.resx">
-      <DependentUpon>201603161842028_VideoGames.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201603161848273_PlatformName.resx">
-      <DependentUpon>201603161848273_PlatformName.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201603170432470_tweakGames.resx">
-      <DependentUpon>201603170432470_tweakGames.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201603170438199_tweakGames2.resx">
-      <DependentUpon>201603170438199_tweakGames2.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201603252024227_initme.resx">
+      <DependentUpon>201603252024227_initme.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
@@ -388,10 +368,10 @@
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
   </Target>
   <Target Name="CopyRoslynFiles" AfterTargets="AfterBuild" Condition="!$(Disable_CopyWebApplication) And '$(OutDir)' != '$(OutputPath)'">
-      <ItemGroup>
-        <RoslynFiles Include="$(CscToolPath)\*" />
-      </ItemGroup>
-      <MakeDir Directories="$(WebProjectOutputDir)\bin\roslyn" />
-      <Copy SourceFiles="@(RoslynFiles)" DestinationFolder="$(WebProjectOutputDir)\bin\roslyn" SkipUnchangedFiles="true" Retries="$(CopyRetryCount)" RetryDelayMilliseconds="$(CopyRetryDelayMilliseconds)" />
+    <ItemGroup>
+      <RoslynFiles Include="$(CscToolPath)\*" />
+    </ItemGroup>
+    <MakeDir Directories="$(WebProjectOutputDir)\bin\roslyn" />
+    <Copy SourceFiles="@(RoslynFiles)" DestinationFolder="$(WebProjectOutputDir)\bin\roslyn" SkipUnchangedFiles="true" Retries="$(CopyRetryCount)" RetryDelayMilliseconds="$(CopyRetryDelayMilliseconds)" />
   </Target>
 </Project>

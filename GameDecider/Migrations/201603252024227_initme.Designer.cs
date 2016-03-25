@@ -7,13 +7,13 @@ namespace GameDecider.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class tweakGames : IMigrationMetadata
+    public sealed partial class initme : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(tweakGames));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(initme));
         
         string IMigrationMetadata.Id
         {
-            get { return "201603170432470_tweakGames"; }
+            get { return "201603252024227_initme"; }
         }
         
         string IMigrationMetadata.Source

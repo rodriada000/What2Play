@@ -3,11 +3,30 @@
 }
 
 <div class="jumbotron">
-    <h1>Search For Games</h1><br />
+    <h2>Search Games</h2><br />
     @using (Html.BeginForm("Index", "Search", FormMethod.Get))
     {
         @Html.TextBox("gamesearch");
         <br />
+        <br />
         <input type="submit" value="Search" sytle="height:25px; width:50px"/>
     }
 </div>
+
+@if (Request.IsAuthenticated)
+{
+    <input type="button" value="What should I play?" onclick="javascript:PickGame()" />
+    <div id="randomgame"></div>
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+        function PickGame()
+        {
+            var url = '@Url.Action("SelectRandomGame", "Home")';
+            $("#randomgame").load(url);
+        }
+    </script>
+    
+}
