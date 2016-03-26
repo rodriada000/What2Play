@@ -27,7 +27,7 @@ namespace GameDecider.Models
         public DbSet<Platform> Platforms { get; set; }
 
         public ApplicationDbContext()
-            : base("appharborDB", throwIfV1Schema: false)
+            : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
 
