@@ -7,6 +7,9 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using GameDecider.Models;
+using System.Collections.Generic;
+using System.Net;
+using Newtonsoft.Json;
 
 namespace GameDecider.Controllers
 {
@@ -73,7 +76,25 @@ namespace GameDecider.Controllers
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
             ApplicationDbContext db = new ApplicationDbContext();
-            ViewBag.Games = db.VideoGames.Where(g => g.UserID == userId);
+            List<VideoGame> myGames = db.VideoGames.Where(g => g.UserID == userId).ToList();
+            List<string> gameNames = new List<string>();
+
+            foreach (VideoGame vg in myGames)
+            {
+                using (WebClient wc = new WebClient())
+                {
+                    string url = "https://www.igdb.com/api/v1/games/" + vg.GameID.ToString() + "?token=RdX2gpnNPeXJktPPCmnKt4E4BG5FoJXsUh5-gFARXOY";
+                    var json = wc.DownloadString(url);
+                    if (json != null)
+                    {
+                        RootObject game = JsonConvert.DeserializeObject<RootObject>(json);
+                        gameNames.Add(game.game.name);
+                    }
+                }
+            }
+
+            ViewBag.Games = myGames;
+            ViewBag.Names = gameNames;
             return View(model);
         }
 
