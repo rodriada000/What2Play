@@ -27,7 +27,8 @@ namespace GameDecider.Controllers
 
             using (WebClient wc = new WebClient())
             {
-                string url = "https://www.igdb.com/api/v1/games/search?q=" + gamesearch + "&token=RdX2gpnNPeXJktPPCmnKt4E4BG5FoJXsUh5-gFARXOY";
+                string token = System.Configuration.ConfigurationManager.AppSettings["IGDB_API_KEY"];
+                string url = "https://www.igdb.com/api/v1/games/search?q=" + gamesearch + "&token=" + token;
                 var json = wc.DownloadString(url);
                 if (json != null)
                 {
@@ -47,7 +48,8 @@ namespace GameDecider.Controllers
             //{
             //    using (WebClient wc = new WebClient())
             //    {
-            //        string url = "https://www.igdb.com/api/v1/games/" + id_str + "?token=RdX2gpnNPeXJktPPCmnKt4E4BG5FoJXsUh5-gFARXOY";
+            //        string token = System.Configuration.ConfigurationManager.AppSettings["IGDB_API_KEY"];
+            //        string url = "https://www.igdb.com/api/v1/games/" + id_str + "?token=" + token;
             //        var json = wc.DownloadString(url);
             //        if (json != null)
             //        {
@@ -93,19 +95,4 @@ namespace GameDecider.Controllers
         }
     }
 
-    public class IgdbGame
-    {
-        public int id { get; set; }
-
-        [DisplayName("Name")]
-        public string name { get; set; }
-
-        public string slug { get; set; }
-
-        [DisplayName("Release Date")]
-        public DateTime? release_date { get; set; }
-
-        public string cover { get; set; }
-        public string cover_id { get; set; }
-    }
 }

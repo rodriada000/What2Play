@@ -62,7 +62,13 @@
         @for (int i = 0; i < ViewBag.Games.Count; i++)
         {
             <tr>
-                <td>@ViewBag.Names[i]</td>
+                <td>
+                    @{
+                        string game = ViewBag.Names[i].Replace(' ', '-').Replace(":", ""); // replace spaces with dashes for proper url and remove any colons
+                        string url = "http://www.igdb.com/games/" + game.ToLower();
+                    }
+                    <a href="@url" style="color: #1c7d44;" title="Click to view game info on IGDB" target="_blank"><b>@ViewBag.Names[i]</b></a>
+                </td>
                 <td>@ViewBag.Games[i].PlatformName.Name</td>
                 @if (ViewBag.Games[i].Favorite == true)
                 {

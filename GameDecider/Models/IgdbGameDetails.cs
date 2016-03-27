@@ -5,7 +5,10 @@ using System.Web;
 
 namespace GameDecider.Models
 {
-
+    /// <summary>
+    /// These classes are used to parse json data when looking up a specific game on IGDB
+    /// Classes auto-generated using json2csharp.com
+    /// </summary>
     public class Genre
     {
         public string name { get; set; }

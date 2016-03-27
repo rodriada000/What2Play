@@ -23,21 +23,29 @@ namespace GameDecider.Controllers
             string chosenGame = "GAME";
             ApplicationDbContext db = new ApplicationDbContext();
             var userId = User.Identity.GetUserId();
-            var userGames = db.VideoGames.Where(g => g.UserID == userId).ToList();
+            var userGames = db.VideoGames.Where(g => g.UserID == userId).ToList(); // get list of user's games
             Random rand = new Random();
-            int index = rand.Next(userGames.Count());
+            int index = rand.Next(userGames.Count()); // choose a random index
 
-            int gameID = userGames[index].GameID;
-
-            using (WebClient wc = new WebClient())
+            if (Session["MyGameNames"] == null)
             {
-                string url = "https://www.igdb.com/api/v1/games/" + gameID.ToString() + "?token=RdX2gpnNPeXJktPPCmnKt4E4BG5FoJXsUh5-gFARXOY";
-                var json = wc.DownloadString(url);
-                if (json != null)
+                int gameID = userGames[index].GameID; // access a random game id
+                using (WebClient wc = new WebClient())
                 {
-                    RootObject game = JsonConvert.DeserializeObject<RootObject>(json);
-                    chosenGame = game.game.name;
+                    string token = System.Configuration.ConfigurationManager.AppSettings["IGDB_API_KEY"];
+                    string url = "https://www.igdb.com/api/v1/games/" + gameID.ToString() + "?token=" + token;
+                    var json = wc.DownloadString(url);
+                    if (json != null)
+                    {
+                        RootObject game = JsonConvert.DeserializeObject<RootObject>(json);
+                        chosenGame = game.game.name;
+                    }
                 }
+            }
+            else // Used cached names to pick random game
+            {
+                var gameNames = Session["MyGameNames"] as List<string>;
+                chosenGame = gameNames[index];
             }
 
             ViewBag.Game = chosenGame;
