@@ -23,29 +23,24 @@ namespace GameDecider.Controllers
             string chosenGame = "GAME";
             ApplicationDbContext db = new ApplicationDbContext();
             var userId = User.Identity.GetUserId();
-            var userGames = db.VideoGames.Where(g => g.UserID == userId).ToList(); // get list of user's games
+            var myGames = db.UsersVideoGames.Where(g => g.UserID == userId).ToList(); // get list of user's games
             Random rand = new Random();
-            int index = rand.Next(userGames.Count()); // choose a random index
+            int index = rand.Next(myGames.Count()); // choose a random index
 
-            if (Session["MyGameNames"] == null)
+            chosenGame = myGames[index].GameID.GameName;
+            if (Session["PreviousChoice"] != null)
             {
-                int gameID = userGames[index].GameID; // access a random game id
-                using (WebClient wc = new WebClient())
+                string prev = Session["PreviousChoice"] as string;
+                while (chosenGame == prev) // prevent the same game from being chosen
                 {
-                    string token = System.Configuration.ConfigurationManager.AppSettings["IGDB_API_KEY"];
-                    string url = "https://www.igdb.com/api/v1/games/" + gameID.ToString() + "?token=" + token;
-                    var json = wc.DownloadString(url);
-                    if (json != null)
-                    {
-                        RootObject game = JsonConvert.DeserializeObject<RootObject>(json);
-                        chosenGame = game.game.name;
-                    }
+                    index = rand.Next(myGames.Count()); // choose a random index
+                    chosenGame = myGames[index].GameID.GameName;
                 }
+                Session["PreviousChoice"] = chosenGame;
             }
-            else // Used cached names to pick random game
+            else
             {
-                var gameNames = Session["MyGameNames"] as List<string>;
-                chosenGame = gameNames[index];
+                Session.Add("PreviousChoice", chosenGame);
             }
 
             ViewBag.Game = chosenGame;

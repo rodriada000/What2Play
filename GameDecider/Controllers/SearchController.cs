@@ -24,6 +24,11 @@ namespace GameDecider.Controllers
             {
                 return View(new List<IgdbGame>());
             }
+            if (gamesearch == "Game Added!" || gamesearch == "Failed to add game...")
+            {
+                ViewBag.Status = gamesearch;
+                return View(new List<IgdbGame>());
+            }
 
             using (WebClient wc = new WebClient())
             {
@@ -71,27 +76,81 @@ namespace GameDecider.Controllers
             //        }
             //    }
             //}
-            ViewBag.GameId = id_str;
+            int game_id = int.Parse(id_str);
+            ViewBag.GameId = game_id;
             return PartialView(db.Platforms.ToList());
         }
 
         [HttpPost]
-        public ActionResult AddGame(string plat_id_str, string game_id)
+        [ValidateAntiForgeryToken]
+        public ActionResult AddGame(string plat_id_str, int game_id)
         {
-            VideoGame game = new VideoGame();
-            game.GameID = int.Parse(game_id);
-            game.Favorite = false;
             int plat_id = int.Parse(plat_id_str);
-            game.PlatformName = db.Platforms.AsEnumerable().ElementAt(plat_id - 1);
 
             if (Request.IsAuthenticated)
             {
                 var userId = User.Identity.GetUserId();
+
+                // Add name/id to VideoGames table if doesn't exist
+                if (GameExists(game_id) == false)
+                {
+                    VideoGame igdbGame = new VideoGame();
+                    igdbGame.IgdbID = game_id;
+                    igdbGame.GameName = GetName(game_id);
+                    if (igdbGame.GameName != null)
+                    {
+                        db.VideoGameNames.Add(igdbGame);
+                        db.SaveChanges();
+                    }
+                }
+
+                UserVideoGame game = new UserVideoGame();
                 game.UserID = userId;
-                db.VideoGames.Add(game);
+                game.IgdbID = game_id;
+                game.Favorite = false;
+                game.PlatformID = plat_id;
+
+                db.UsersVideoGames.Add(game);
                 db.SaveChanges();
+                Session.Remove("MyGames"); // remove list from session so new game can be added to the Session
+                return RedirectToAction("Index", new { gamesearch = "Game Added!" });
             }
-            return RedirectToAction("Index");
+            else
+            {
+                return RedirectToAction("Index", new { gamesearch = "Failed to add game ..." });
+            }
+        }
+
+        // Check if the game name is already stored in the DB
+        private bool GameExists(int id)
+        {
+            var game = db.VideoGameNames.Where(g => g.IgdbID == id).ToList();
+
+            if (game == null || game.Count == 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        // Fetch game name from IGDB API
+        private string GetName(int id)
+        {
+            using (WebClient wc = new WebClient())
+            {
+                string token = System.Configuration.ConfigurationManager.AppSettings["IGDB_API_KEY"];
+                string url = "https://www.igdb.com/api/v1/games/" + id.ToString() + "?token=" + token;
+                var json = wc.DownloadString(url);
+                if (json != null)
+                {
+                    RootObject game = JsonConvert.DeserializeObject<RootObject>(json);
+                    return game.game.name;
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
     }
 

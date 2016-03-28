@@ -3,7 +3,7 @@ namespace GameDecider.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class initme : DbMigration
+    public partial class init : DbMigration
     {
         public override void Up()
         {
@@ -85,33 +85,46 @@ namespace GameDecider.Migrations
                 .Index(t => t.UserId);
             
             CreateTable(
+                "dbo.UserVideoGames",
+                c => new
+                    {
+                        UserVideoGameID = c.Int(nullable: false, identity: true),
+                        Favorite = c.Boolean(nullable: false),
+                        IgdbID = c.Int(nullable: false),
+                        PlatformID = c.Int(nullable: false),
+                        UserID = c.String(maxLength: 128),
+                    })
+                .PrimaryKey(t => t.UserVideoGameID)
+                .ForeignKey("dbo.VideoGames", t => t.IgdbID, cascadeDelete: true)
+                .ForeignKey("dbo.Platforms", t => t.PlatformID, cascadeDelete: true)
+                .ForeignKey("dbo.AspNetUsers", t => t.UserID)
+                .Index(t => t.IgdbID)
+                .Index(t => t.PlatformID)
+                .Index(t => t.UserID);
+            
+            CreateTable(
                 "dbo.VideoGames",
                 c => new
                     {
-                        VideoGameID = c.Int(nullable: false, identity: true),
-                        GameID = c.Int(nullable: false),
-                        Favorite = c.Boolean(nullable: false),
-                        UserID = c.String(maxLength: 128),
-                        PlatformName_PlatformID = c.Int(),
+                        IgdbID = c.Int(nullable: false),
+                        GameName = c.String(maxLength: 512),
                     })
-                .PrimaryKey(t => t.VideoGameID)
-                .ForeignKey("dbo.Platforms", t => t.PlatformName_PlatformID)
-                .ForeignKey("dbo.AspNetUsers", t => t.UserID)
-                .Index(t => t.UserID)
-                .Index(t => t.PlatformName_PlatformID);
+                .PrimaryKey(t => t.IgdbID);
             
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.VideoGames", "UserID", "dbo.AspNetUsers");
-            DropForeignKey("dbo.VideoGames", "PlatformName_PlatformID", "dbo.Platforms");
+            DropForeignKey("dbo.UserVideoGames", "UserID", "dbo.AspNetUsers");
+            DropForeignKey("dbo.UserVideoGames", "PlatformID", "dbo.Platforms");
+            DropForeignKey("dbo.UserVideoGames", "IgdbID", "dbo.VideoGames");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
-            DropIndex("dbo.VideoGames", new[] { "PlatformName_PlatformID" });
-            DropIndex("dbo.VideoGames", new[] { "UserID" });
+            DropIndex("dbo.UserVideoGames", new[] { "UserID" });
+            DropIndex("dbo.UserVideoGames", new[] { "PlatformID" });
+            DropIndex("dbo.UserVideoGames", new[] { "IgdbID" });
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
@@ -119,6 +132,7 @@ namespace GameDecider.Migrations
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
             DropTable("dbo.VideoGames");
+            DropTable("dbo.UserVideoGames");
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");

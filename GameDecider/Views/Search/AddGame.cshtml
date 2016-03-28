@@ -8,6 +8,7 @@
             <td>
                 @using (Html.BeginForm("AddGame", "Search", new { plat_id_str = item.PlatformID, game_id = ViewBag.GameId }, FormMethod.Post))
                 {
+                    @Html.AntiForgeryToken()
                     <input type="submit" value="@item.Name" />
                 }
             </td>

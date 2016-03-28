@@ -76,31 +76,9 @@ namespace GameDecider.Controllers
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
             ApplicationDbContext db = new ApplicationDbContext();
-            List<VideoGame> myGames = db.VideoGames.Where(g => g.UserID == userId).ToList();
-            List<string> gameNames = Session["MyGameNames"] as List<string>;
-
-            if (gameNames == null || gameNames.Count < myGames.Count) // nothing in cache or user has updated their game list
-            {
-                gameNames = new List<string>();
-                foreach (VideoGame vg in myGames)
-                {
-                    using (WebClient wc = new WebClient()) // fetch game names from IGDB
-                    {
-                        string token = System.Configuration.ConfigurationManager.AppSettings["IGDB_API_KEY"];
-                        string url = "https://www.igdb.com/api/v1/games/" + vg.GameID.ToString() + "?token=" + token;
-                        var json = wc.DownloadString(url);
-                        if (json != null)
-                        {
-                            RootObject game = JsonConvert.DeserializeObject<RootObject>(json);
-                            gameNames.Add(game.game.name);
-                        }
-                    }
-                }
-                Session.Add("MyGameNames", gameNames); // store names in Session to prevent multiple API calls
-            }
+            var myGames = db.UsersVideoGames.Where(g => g.UserID == userId).ToList();
 
             ViewBag.Games = myGames;
-            ViewBag.Names = gameNames;
             return View(model);
         }
 

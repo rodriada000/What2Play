@@ -10,7 +10,8 @@ namespace GameDecider.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
         }
 
         protected override void Seed(GameDecider.Models.ApplicationDbContext context)
@@ -27,7 +28,6 @@ namespace GameDecider.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
-
             context.Platforms.AddOrUpdate(p => p.Name, new Platform { Name = "PS4" }, new Platform { Name = "Xbox One" }, new Platform { Name = "PC" }, new Platform { Name = "Xbox 360" },
                                                         new Platform { Name = "Playstation 3" });
         }

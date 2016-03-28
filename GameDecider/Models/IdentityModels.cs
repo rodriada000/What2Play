@@ -10,7 +10,7 @@ namespace GameDecider.Models
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
-        public virtual ICollection<VideoGame> VideoGames { get; set; }
+        public virtual ICollection<UserVideoGame> VideoGames { get; set; }
         
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
@@ -23,8 +23,9 @@ namespace GameDecider.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public DbSet<VideoGame> VideoGames { get; set; }
-        public DbSet<Platform> Platforms { get; set; }
+        public DbSet<UserVideoGame> UsersVideoGames { get; set; } // table containing all of users owned games
+        public DbSet<VideoGame> VideoGameNames { get; set; } // table containing IGDB ID's and the corresponding game name
+        public DbSet<Platform> Platforms { get; set; } // table of available platforms
 
         public ApplicationDbContext()
             : base("appharborDB", throwIfV1Schema: false)

@@ -1,0 +1,14 @@
+﻿@functions
+{
+    public static string CreateUrl(string name)
+    {
+        string url = "https://www.igdb.com/games/";
+
+        string sanatized = name.ToLower();
+        sanatized = sanatized.Replace(":", "").Replace(".", "").Replace("+", "-plus");
+        sanatized = System.Text.RegularExpressions.Regex.Replace(sanatized, @"\s+", "-");
+        url = url + sanatized;
+
+        return url;
+    }
+}

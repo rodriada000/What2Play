@@ -3,11 +3,17 @@
 @{
     ViewBag.Title = "Search Results";
 }
-
 <br />
 @using (Html.BeginForm("Index", "Search", FormMethod.Get))
 {
-@Html.Label("Search: "); @Html.TextBox("gamesearch"); <input type="submit" value="Search" />
+    if (ViewBag.Status == null)
+    {
+        Html.Label("Search: "); @Html.TextBox("gamesearch"); <input type="submit" value="Search" />
+    }
+    else
+    {
+        Html.Label("Search: "); @Html.TextBox(" "); <input type="submit" value="Search" />
+    }
 }
 
 <h1>Results</h1>
@@ -29,11 +35,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @{ 
-                string game = item.name.Replace(' ', '-').Replace(":", ""); // replace spaces with dashes for proper url and remove any colons
-                string url = "http://www.igdb.com/games/" + game.ToLower(); 
-             }
-            <a href="@url" style="color: #1c7d44;" title="Click to view game info on IGDB" target="_blank"><b>@Html.DisplayFor(modelItem => item.name)</b></a>
+            <a href=@HelperFuncs.CreateUrl(item.name) style="color: #1c7d44;" title="Click to view game info on IGDB" target="_blank"><b>@Html.DisplayFor(modelItem => item.name)</b></a>
         </td>
         <td>
             @if (item.release_date != null)
@@ -78,4 +80,15 @@
             });
         }
     </script>
+
+    @if (ViewBag.Status != null)
+        {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                toastr.options = { "positionClass": "toast-bottom-full-width", "timeOut": "3000" };
+                toastr.info('@ViewBag.Status');
+            });
+        </script>
+    }
+
 }
