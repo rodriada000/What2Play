@@ -82,6 +82,22 @@ namespace GameDecider.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RemoveGame(int user_game_id)
+        {
+            //int id = int.Parse(user_game_id);
+            string userId = User.Identity.GetUserId();
+            ApplicationDbContext db = new ApplicationDbContext();
+            List<UserVideoGame> toRemove = db.UsersVideoGames.Where(g => g.UserVideoGameID == user_game_id && g.UserID == userId).ToList();
+            if (toRemove.Count > 0) {
+                db.UsersVideoGames.Remove(toRemove[0]);
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        }
+
         //
         // POST: /Manage/RemoveLogin
         [HttpPost]

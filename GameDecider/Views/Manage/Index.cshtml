@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Manage";
 }
-
+<head><link href="@Url.Content("~/Content/tablestyles.css")" rel="stylesheet" /></head>
 <h2>@ViewBag.Title.</h2>
 
 <p class="text-success">@ViewBag.StatusMessage</p>
@@ -53,28 +53,62 @@
 
 <div>
     <h2>My Games</h2>
-    <table style="width:100%">
-        <tr>
-            <th>Name</th>
-            <th>Platform</th>
-            <th>Favorited</th>
-        </tr>
-        @for (int i = 0; i < ViewBag.Games.Count; i++)
-        {
+    <table id="mygames">
+        <thead>
             <tr>
-                <td>
-                    <a href=@HelperFuncs.CreateUrl(@ViewBag.Games[i].GameID.GameName) style="color: #1c7d44;" title="Click to view game info on IGDB" target="_blank"><b>@ViewBag.Games[i].GameID.GameName</b></a>
-                </td>
-                <td>@ViewBag.Games[i].PlatformName.Name</td>
-                @if (ViewBag.Games[i].Favorite == true)
-                {
-                    <td>Yes</td>
-                }
-                else
-                {
-                    <td>No</td>
-                }
+                <th>Name</th>
+                <th>Platform</th>
+                <th>Favorited</th>
+                <th></th>
             </tr>
-        }
+        </thead>
+        <tbody>
+            @for (int i = 0; i < ViewBag.Games.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <a href=@HelperFuncs.CreateUrl(@ViewBag.Games[i].GameID.GameName) style="color: #1c7d44;" title="Click to view game info on IGDB" target="_blank"><b>@ViewBag.Games[i].GameID.GameName</b></a>
+                    </td>
+                    <td>@ViewBag.Games[i].PlatformName.Name</td>
+                    @if (ViewBag.Games[i].Favorite == true)
+                {
+                        <td>Yes</td>
+                    }
+                    else
+                    {
+                        <td>No</td>
+                    }
+                    <td class="icon">
+                        @using (Html.BeginForm("RemoveGame", "Manage", new { user_game_id = @ViewBag.Games[i].UserVideoGameID }, FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken();
+                            <button type="submit" style="border:none; background:transparent;">
+                                <div class="ui-state-default ui-corner-all" title="Remove game from account">
+                                   <span id="closeIcon" class="ui-icon ui-icon-closethick"></span>
+                                </div>
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
     </table>
 </div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#mygames').tablesorter();
+            $('button[type=submit]').button({ icons: { primary: 'ui-icon-closethick' } });
+        });
+    </script>
+
+    <script type="text/javascript">
+       function RemoveGame(id) {
+           var url = "@Url.Action("RemoveGame", new { user_game_id = "JSVAR"})";
+           url = url.replace("JSVAR", id);
+           $(this).load(url);
+        }
+    </script>
+}

@@ -1,0 +1,21 @@
+﻿table {
+    width: 100%;
+}
+
+th, td {
+    border-bottom: 1px solid #ddd; /*horizontal dividers*/
+}
+
+td {
+    padding: 10px;
+}
+
+th {
+    padding: 5px;
+    background-color: #1c7d44;
+    color: #FAFAFA;
+}
+
+td.icon { width:25px; }
+
+tr:nth-child(even) {background-color: #f2f2f2} /*Make table zebra striped*/

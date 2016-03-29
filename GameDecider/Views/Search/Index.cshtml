@@ -6,14 +6,7 @@
 <br />
 @using (Html.BeginForm("Index", "Search", FormMethod.Get))
 {
-    if (ViewBag.Status == null)
-    {
-        Html.Label("Search: "); @Html.TextBox("gamesearch"); <input type="submit" value="Search" />
-    }
-    else
-    {
-        Html.Label("Search: "); @Html.TextBox(" "); <input type="submit" value="Search" />
-    }
+    @Html.Label("Search: "); @Html.TextBox("gamesearch"); <input type="submit" value="Search" />
 }
 
 <h1>Results</h1>
@@ -74,7 +67,6 @@
                 open: function () {
                     url = "@Url.Action("AddGame", new { id_str = "JSVar" })";
                     url = url.replace("JSVar", id);
-                    console.log(url);
                     $(this).load(url);
                 },
             });
@@ -84,9 +76,22 @@
     @if (ViewBag.Status != null)
         {
         <script type="text/javascript">
+            var msg = '@ViewBag.Status';
             $(document).ready(function () {
                 toastr.options = { "positionClass": "toast-bottom-full-width", "timeOut": "3000" };
-                toastr.info('@ViewBag.Status');
+                if (msg == "##Added!") {
+                    toastr.success('Game Added!');
+                    return false;
+                }
+                if (msg == "##Duplicate!") {
+                    toastr.info('You have already added this game');
+                    return false;
+                }
+                if (msg == "##Failed!") {
+                    toastr.error('Failed to add game');
+                    return false;
+                }
+                
             });
         </script>
     }

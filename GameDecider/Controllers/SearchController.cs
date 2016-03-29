@@ -24,7 +24,7 @@ namespace GameDecider.Controllers
             {
                 return View(new List<IgdbGame>());
             }
-            if (gamesearch == "Game Added!" || gamesearch == "Failed to add game...")
+            if (gamesearch == "##Added!" || gamesearch == "##Failed!" || gamesearch == "##Duplicate!")
             {
                 ViewBag.Status = gamesearch;
                 return View(new List<IgdbGame>());
@@ -48,37 +48,45 @@ namespace GameDecider.Controllers
         [HttpGet]
         public ActionResult AddGame(string id_str)
         {
-            //List<string> available_plats = new List<string>();
-            //if (id_str != null)
-            //{
-            //    using (WebClient wc = new WebClient())
-            //    {
-            //        string token = System.Configuration.ConfigurationManager.AppSettings["IGDB_API_KEY"];
-            //        string url = "https://www.igdb.com/api/v1/games/" + id_str + "?token=" + token;
-            //        var json = wc.DownloadString(url);
-            //        if (json != null)
-            //        {
-            //            RootObject game = JsonConvert.DeserializeObject<RootObject>(json);
-            //            if (game.game.release_dates != null)
-            //            {
-            //                foreach (ReleaseDate r in game.game.release_dates)
-            //                {
-            //                    if (r.platform_name == "Microsoft Windows" || r.platform_name == "Mac" || r.platform_name == "Linux")
-            //                    {
-            //                        available_plats.Add("PC"); // Unify any computer game to be under PC
-            //                    }
-            //                    else
-            //                    {
-            //                        available_plats.Add(r.platform_name);
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
+            Dictionary<string, Platform> platforms = db.Platforms.ToDictionary(k => k.Name);
+            List<Platform> available_plats = new List<Platform>();
+            if (id_str != null)
+            {
+                using (WebClient wc = new WebClient())
+                {
+                    string token = System.Configuration.ConfigurationManager.AppSettings["IGDB_API_KEY"];
+                    string url = "https://www.igdb.com/api/v1/games/" + id_str + "?token=" + token;
+                    var json = wc.DownloadString(url);
+                    if (json != null)
+                    {
+                        RootObject game = JsonConvert.DeserializeObject<RootObject>(json);
+                        if (game.game.release_dates != null)
+                        {
+                            foreach (ReleaseDate r in game.game.release_dates)
+                            {
+                                if (r.platform_name == "Microsoft Windows" || r.platform_name == "Mac" || r.platform_name == "Linux")
+                                {
+                                    //available_plats.Add("PC"); // Unify any computer game to be under PC
+                                    available_plats.Add(platforms["PC"]);
+                                }
+                                else
+                                {
+                                    //available_plats.Add(r.platform_name);
+                                    try {
+                                        available_plats.Add(platforms[r.platform_name]);
+                                    }
+                                    catch (Exception e) {
+                                        // hmmmmm
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             int game_id = int.Parse(id_str);
             ViewBag.GameId = game_id;
-            return PartialView(db.Platforms.ToList());
+            return PartialView(available_plats);
         }
 
         [HttpPost]
@@ -110,14 +118,21 @@ namespace GameDecider.Controllers
                 game.Favorite = false;
                 game.PlatformID = plat_id;
 
+                // Verify game is not already added
+                var usersGames = db.UsersVideoGames.Where(g => g.IgdbID == game_id && g.UserID == userId && g.PlatformID == plat_id).ToList();
+                if (usersGames.Count > 0)
+                {
+                    return RedirectToAction("Index", new { gamesearch = "##Duplicate!" });
+                }
+
                 db.UsersVideoGames.Add(game);
                 db.SaveChanges();
                 Session.Remove("MyGames"); // remove list from session so new game can be added to the Session
-                return RedirectToAction("Index", new { gamesearch = "Game Added!" });
+                return RedirectToAction("Index", new { gamesearch = "##Added!" });
             }
             else
             {
-                return RedirectToAction("Index", new { gamesearch = "Failed to add game ..." });
+                return RedirectToAction("Index", new { gamesearch = "##Failed!" });
             }
         }
 

@@ -2,17 +2,31 @@
 
 <table class="table">
 
-    @foreach (var item in Model)
+    @foreach (var item in Model) // show all platforms if unable to retrieve available platforms
     {
         <tr>
             <td>
                 @using (Html.BeginForm("AddGame", "Search", new { plat_id_str = item.PlatformID, game_id = ViewBag.GameId }, FormMethod.Post))
                 {
-                    @Html.AntiForgeryToken()
+                    @Html.AntiForgeryToken();
                     <input type="submit" value="@item.Name" />
                 }
             </td>
         </tr>
     }
-
+@*else
+{
+    @foreach (var item in ViewData["AvailablePlats"] as List<GameDecider.Models.Platform>)
+    {
+        <tr>
+            <td>
+                @using (Html.BeginForm("AddGame", "Search", new { plat_id_str = item.PlatformID, game_id = ViewBag.GameId }, FormMethod.Post))
+                {
+                    Html.AntiForgeryToken();
+                    <input type="submit" value="@item.Name" />
+                }
+            </td>
+        </tr>
+    }
+}*@
 </table>
