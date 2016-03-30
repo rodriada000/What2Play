@@ -44,7 +44,7 @@ namespace GameDecider.Controllers
             }
 
             ViewBag.Game = chosenGame;
-            return PartialView();
+            return PartialView("SelectRandomGame");
         }
 
         public ActionResult About()

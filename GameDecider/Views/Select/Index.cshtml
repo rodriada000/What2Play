@@ -1,0 +1,55 @@
+﻿@model List<GameDecider.Models.UserVideoGame>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@if (Request.IsAuthenticated == false)
+{
+    <h2>Oops!</h2>
+    <div style="font-size:medium">You dont seem to be logged in. you can do so by <b>@Html.ActionLink("clicking here.", "Login", "Account")</b></div>
+}
+else
+{
+    <h2>Advanced Selection</h2><br />
+    <form method="get">
+        <select name="platformvalue" id="platformvalue">
+            <option value="all">All</option>
+            @for (var i = 0; i < ViewBag.AvailPlatforms.Count; i++)
+            {
+                <option value="@ViewBag.AvailPlatforms[i].PlatformID">@ViewBag.AvailPlatforms[i].Name</option>
+            }
+        </select>
+        <br /><br />
+        Favorites Only: <input type="checkbox" id="favOnly"/>
+    </form>
+
+    <br /><br />
+    <input type="button" value="Choose a Game!" onclick="javascript:PickGame()" />
+    <br />
+    <div id="randomgame"></div>
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+        function PickGame()
+        {
+            var plats = (document).getElementById('platformvalue');
+            var platvalue = plats.options[plats.selectedIndex].value;
+
+            var favOnly = (document).getElementById('favOnly').checked;
+
+            var criteria = '?platformvalue='.concat(platvalue);
+            criteria = criteria.concat('&favOnly=');
+            criteria = criteria.concat(favOnly);
+
+            var url = '@Url.Action("PickGame", "Select")';
+            url = url.concat(criteria);
+            console.log(url);
+            $("#randomgame").load(url);
+        }
+    </script>
+
+}
+

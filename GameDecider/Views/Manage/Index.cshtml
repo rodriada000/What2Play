@@ -2,7 +2,9 @@
 @{
     ViewBag.Title = "Manage";
 }
-<head><link href="@Url.Content("~/Content/tablestyles.css")" rel="stylesheet" /></head>
+<head>
+    <link href="@Url.Content("~/Content/manageview.css")" rel="stylesheet" />
+</head>
 <h2>@ViewBag.Title.</h2>
 
 <p class="text-success">@ViewBag.StatusMessage</p>
@@ -56,9 +58,9 @@
     <table id="mygames">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Platform</th>
-                <th>Favorited</th>
+                <th class="sortable">Name<div class="right"><div class="arrow-up"></div><div class="arrow-down"></div></div></th>
+                <th class="sortable">Platform</th>
+                <th class="sortable">Favorited</th>
                 <th></th>
             </tr>
         </thead>
@@ -70,13 +72,18 @@
                         <a href=@HelperFuncs.CreateUrl(@ViewBag.Games[i].GameID.GameName) style="color: #1c7d44;" title="Click to view game info on IGDB" target="_blank"><b>@ViewBag.Games[i].GameID.GameName</b></a>
                     </td>
                     <td>@ViewBag.Games[i].PlatformName.Name</td>
-                    @if (ViewBag.Games[i].Favorite == true)
-                {
-                        <td>Yes</td>
-                    }
-                    else
+                    
+                    @using (Html.BeginForm("FavoriteGame", "Manage", new { user_game_id = ViewBag.Games[i].UserVideoGameID }, FormMethod.Post))
                     {
-                        <td>No</td>
+                        @Html.AntiForgeryToken();
+                        if (ViewBag.Games[i].Favorite == true)
+                        {
+                            <td><button class="favBtn" title="Remove from favorites">Yes</button></td>
+                        }
+                        else
+                        {
+                            <td><button class="favBtn" title="Favorite this game">No</button></td>
+                        }
                     }
                     <td class="icon">
                         @using (Html.BeginForm("RemoveGame", "Manage", new { user_game_id = @ViewBag.Games[i].UserVideoGameID }, FormMethod.Post))
@@ -99,7 +106,7 @@
 {
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#mygames').tablesorter();
+            $('#mygames').tablesorter({ headers: { 3: { sorter: false } } });
             $('button[type=submit]').button({ icons: { primary: 'ui-icon-closethick' } });
         });
     </script>

@@ -1,0 +1,71 @@
+﻿.favBtn {
+     background:none!important;
+     border:none; 
+     padding:0!important;
+     font: inherit;
+     border-bottom: 0px; 
+     cursor: pointer;
+     color: #1c7d44;
+     font-weight: bold;
+}
+
+.favBtn:hover {
+    text-decoration: underline;
+}
+
+span#closeIcon:hover {
+    background-color: crimson;
+    opacity: 0.45;
+}
+
+/*'My games' Table style*/
+table {
+    width: 100%;
+}
+
+th, td {
+    border-bottom: 1px solid #ddd; /*horizontal dividers*/
+}
+
+td {
+    padding: 10px;
+}
+
+th {
+    padding: 5px;
+    background-color: #1c7d44;
+    color: #FAFAFA;
+}
+
+th.sortable:hover {
+    cursor: pointer;
+}
+
+td.icon { width:25px; }
+
+tr:nth-child(even) {background-color: #f2f2f2} /*Make table zebra striped*/
+
+/*draw arrows in headers*/
+/*.arrow-up {
+width: 0;
+height: 0;
+border-style: solid;
+border-width: 0 7.5px 8px 7.5px;
+border-color: transparent transparent #ffffff transparent;
+padding-bottom: 5px;
+}
+
+.right {
+    position: absolute;
+    right: 0px;
+    padding: 10px;
+}
+
+.arrow-down {
+width: 0;
+height: 0;
+border-style: solid;
+border-width: 8px 7.5px 0 7.5px;
+border-color: #ffffff transparent transparent transparent;
+padding-top: 2px;
+}*/
