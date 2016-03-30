@@ -18,15 +18,16 @@ namespace GameDecider.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Search
-        public ActionResult Index(string gamesearch)
+        public ActionResult Index(string gamesearch, string status)
         {
-            if (string.IsNullOrWhiteSpace(gamesearch))
+            if (status != null) // user has added a game
             {
+                ViewBag.Status = status;
                 return View(new List<IgdbGame>());
             }
-            if (gamesearch == "##Added!" || gamesearch == "##Failed!" || gamesearch == "##Duplicate!")
+
+            if (string.IsNullOrWhiteSpace(gamesearch))
             {
-                ViewBag.Status = gamesearch;
                 return View(new List<IgdbGame>());
             }
 
@@ -66,17 +67,18 @@ namespace GameDecider.Controllers
                             {
                                 if (r.platform_name == "Microsoft Windows" || r.platform_name == "Mac" || r.platform_name == "Linux")
                                 {
-                                    //available_plats.Add("PC"); // Unify any computer game to be under PC
-                                    available_plats.Add(platforms["PC"]);
+                                    if (available_plats.Contains(platforms["PC"]) == false) // prevent adding multiple "PC" platforms
+                                    {
+                                        available_plats.Add(platforms["PC"]);
+                                    }
                                 }
                                 else
                                 {
-                                    //available_plats.Add(r.platform_name);
                                     try {
                                         available_plats.Add(platforms[r.platform_name]);
                                     }
                                     catch (Exception e) {
-                                        // hmmmmm
+                                        // hmmmmm missing key
                                     }
                                 }
                             }
@@ -86,6 +88,7 @@ namespace GameDecider.Controllers
             }
             int game_id = int.Parse(id_str);
             ViewBag.GameId = game_id;
+            ViewBag.AllPlats = platforms.Values.ToList();
             return PartialView(available_plats);
         }
 
@@ -122,17 +125,17 @@ namespace GameDecider.Controllers
                 var usersGames = db.UsersVideoGames.Where(g => g.IgdbID == game_id && g.UserID == userId && g.PlatformID == plat_id).ToList();
                 if (usersGames.Count > 0)
                 {
-                    return RedirectToAction("Index", new { gamesearch = "##Duplicate!" });
+                    return RedirectToAction("Index", new { status = "Duplicate" });
                 }
 
                 db.UsersVideoGames.Add(game);
                 db.SaveChanges();
                 Session.Remove("MyGames"); // remove list from session so new game can be added to the Session
-                return RedirectToAction("Index", new { gamesearch = "##Added!" });
+                return RedirectToAction("Index", new { status = "Added" });
             }
             else
             {
-                return RedirectToAction("Index", new { gamesearch = "##Failed!" });
+                return RedirectToAction("Index", new { status = "Failed" });
             }
         }
 

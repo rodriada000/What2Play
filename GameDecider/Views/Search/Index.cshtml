@@ -28,7 +28,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            <a href=@HelperFuncs.CreateUrl(item.name) style="color: #1c7d44;" title="Click to view game info on IGDB" target="_blank"><b>@Html.DisplayFor(modelItem => item.name)</b></a>
+            <a href=@HelperFuncs.CreateUrl(item.name) title="Click to view game info on IGDB" target="_blank"><b>@Html.DisplayFor(modelItem => item.name)</b></a>
         </td>
         <td>
             @if (item.release_date != null)
@@ -39,7 +39,7 @@
         @if (Request.IsAuthenticated)
         {
             <td>
-                <a id="add-link" title="Add game to your account" href="#" style="color: #1c7d44" onclick="javascript:ShowDialog('@item.id')">Add Game</a>
+                <a id="add-link" title="Add game to your account" href="#" onclick="javascript:ShowDialog('@item.id')">Add Game</a>
             </td>
         }
     </tr>
@@ -79,15 +79,15 @@
             var msg = '@ViewBag.Status';
             $(document).ready(function () {
                 toastr.options = { "positionClass": "toast-bottom-full-width", "timeOut": "3000" };
-                if (msg == "##Added!") {
+                if (msg == "Added") {
                     toastr.success('Game Added!');
                     return false;
                 }
-                if (msg == "##Duplicate!") {
+                if (msg == "Duplicate") {
                     toastr.info('You have already added this game');
                     return false;
                 }
-                if (msg == "##Failed!") {
+                if (msg == "Failed") {
                     toastr.error('Failed to add game');
                     return false;
                 }

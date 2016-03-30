@@ -7,6 +7,7 @@
     @Styles.Render("~/Content/themes/base/css")
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link href="@Url.Content("~/Content/linkcolor.css")" rel="stylesheet" />
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -33,7 +34,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - What2Play || <b>Game information was freely provided by <a href="https://www.igdb.com" style="color: #1c7d44">IGDB.com</a></b></p> 
+            <p>&copy; @DateTime.Now.Year - What2Play || <b>Game information was freely provided by <a href="https://www.igdb.com">IGDB.com</a></b></p> 
         </footer>
     </div>
 

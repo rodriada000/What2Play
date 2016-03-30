@@ -67,11 +67,11 @@
             {
                 <tr>
                     <td>
-                        <a href=@HelperFuncs.CreateUrl(@ViewBag.Games[i].GameID.GameName) style="color: #1c7d44;" title="Click to view game info on IGDB" target="_blank"><b>@ViewBag.Games[i].GameID.GameName</b></a>
+                        <a href=@HelperFuncs.CreateUrl(@ViewBag.Games[i].GameID.GameName) style="" title="Click to view game info on IGDB" target="_blank"><b>@ViewBag.Games[i].GameID.GameName</b></a>
                     </td>
                     <td>@ViewBag.Games[i].PlatformName.Name</td>
                     @if (ViewBag.Games[i].Favorite == true)
-                {
+                    {
                         <td>Yes</td>
                     }
                     else
