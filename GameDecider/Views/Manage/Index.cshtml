@@ -72,16 +72,7 @@
                         <a href=@HelperFuncs.CreateUrl(@ViewBag.Games[i].GameID.GameName) style="" title="Click to view game info on IGDB" target="_blank"><b>@ViewBag.Games[i].GameID.GameName</b></a>
                     </td>
                     <td>@ViewBag.Games[i].PlatformName.Name</td>
-<<<<<<< HEAD
-                    @if (ViewBag.Games[i].Favorite == true)
-                    {
-                        <td>Yes</td>
-                    }
-                    else
-=======
-                    
                     @using (Html.BeginForm("FavoriteGame", "Manage", new { user_game_id = ViewBag.Games[i].UserVideoGameID }, FormMethod.Post))
->>>>>>> e72652979c00ca4cb67ba817abb9c96ab4302e59
                     {
                         @Html.AntiForgeryToken();
                         if (ViewBag.Games[i].Favorite == true)

@@ -3,19 +3,18 @@
 }
 
 <div class="jumbotron">
-    <h2>Search Games</h2><br />
+    <h1>Find Games</h1>
     @using (Html.BeginForm("Index", "Search", FormMethod.Get))
     {
         @Html.TextBox("gamesearch");
         <br />
-        <br />
-        <input type="submit" value="Search" sytle="height:25px; width:50px"/>
+        <input type="submit" class="btn btn-default" value="Search" sytle="height:25px; width:30px"/>
     }
 </div>
 
 @if (Request.IsAuthenticated)
 {
-    <input type="button" value="What should I play?" onclick="javascript:PickGame()" />
+    <input type="button" value="What should I play?" class="btn btn-default" onclick="javascript:PickGame()" />
     <div id="randomgame"></div>
 }
 

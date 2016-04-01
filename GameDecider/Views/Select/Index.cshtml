@@ -1,7 +1,7 @@
 ﻿@model List<GameDecider.Models.UserVideoGame>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Pick Game";
 }
 
 @if (Request.IsAuthenticated == false)
@@ -24,8 +24,8 @@ else
         Favorites Only: <input type="checkbox" id="favOnly"/>
     </form>
 
-    <br /><br />
-    <input type="button" value="Choose a Game!" onclick="javascript:PickGame()" />
+    <br />
+    <input type="button" value="Choose a Game!" class="btn btn-default" onclick="javascript:PickGame()" />
     <br />
     <div id="randomgame"></div>
 }
